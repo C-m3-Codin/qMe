@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/C-m3-Codin/q_me/services"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store/sqlstore"
@@ -20,6 +21,8 @@ func eventHandler(evt interface{}) {
         fmt.Println("Received a message!", v.Message.GetConversation())
     }
 }
+
+
 
 func main() {
     dbLog := waLog.Stdout("Database", "DEBUG", true)
@@ -62,8 +65,11 @@ func main() {
         if err != nil {
             panic(err)
         }
+        services.GetCurrency()
     }
 
+
+    
     // Listen to Ctrl+C (you can also do something else that prevents the program from exiting)
     c := make(chan os.Signal)
     signal.Notify(c, os.Interrupt, syscall.SIGTERM)
