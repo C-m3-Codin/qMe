@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/C-m3-Codin/q_me/services"
+	unitcovertion "github.com/C-m3-Codin/q_me/unitCovertion"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store/sqlstore"
@@ -19,6 +20,7 @@ func eventHandler(evt interface{}) {
     switch v := evt.(type) {
     case *events.Message:
         fmt.Println("Received a message!", v.Message.GetConversation())
+        unitcovertion.GetCurrencyUnit("USD")
     }
 }
 
@@ -65,7 +67,7 @@ func main() {
         if err != nil {
             panic(err)
         }
-        services.ScheduleCurrency()
+        go services.ScheduleCurrency()
     }
 
 

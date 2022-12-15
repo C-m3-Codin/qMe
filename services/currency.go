@@ -5,21 +5,37 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+
+	unitcovertion "github.com/C-m3-Codin/q_me/unitCovertion"
 )
+
+
+type response struct   {
+	Rates map[string]float32
+	Success bool
+	Historical bool
+	Base string
+	Date string
+}
 
 // schedules to call the api every x amount of time
 func ScheduleCurrency(){
 	for true {
         fmt.Println("Hello !!")
-		getCurrency()
-        time.Sleep(2 * time.Second)
+		
+		unitcovertion.SetCurrencyUnit(getCurrencyAPI())
+        time.Sleep(10 * time.Second)
+
     }
 }
 
 // hits the api to get exchange rates
-func getCurrency() {
+func getCurrencyAPI()map[string]float32 {
 	client := http.Client{}
-	request, err := http.NewRequest("GET", "https://api.exchangerate.host/latest", nil)
+	currentTime := time.Now()
+	apiEndpoint:="https://api.exchangerate.host/latestv?v="+currentTime.Format("2006-01-02")
+	fmt.Println("\n\n\n")
+	request, err := http.NewRequest("GET", apiEndpoint, nil)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -29,10 +45,14 @@ func getCurrency() {
 		fmt.Println(err)
 	}
 
-	var result map[string]interface{}
+	var result response
 	json.NewDecoder(resp.Body).Decode(&result)
 	fmt.Println("\n\n\n\n\n\n\n\n")
-	fmt.Println(result["rates"])
+	fmt.Println(result.Rates)
+	fmt.Println("\n\n\n\n\n")
+	fmt.Println(result.Rates)
+	return result.Rates
+
 }
 
 
