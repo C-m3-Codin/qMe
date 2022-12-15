@@ -7,22 +7,15 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/C-m3-Codin/q_me/handler"
 	"github.com/C-m3-Codin/q_me/services"
-	unitcovertion "github.com/C-m3-Codin/q_me/unitCovertion"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store/sqlstore"
-	"go.mau.fi/whatsmeow/types/events"
 	waLog "go.mau.fi/whatsmeow/util/log"
 )
 
-func eventHandler(evt interface{}) {
-    switch v := evt.(type) {
-    case *events.Message:
-        fmt.Println("Received a message!", v.Message.GetConversation())
-        unitcovertion.GetCurrencyUnit("USD")
-    }
-}
+
 
 
 
@@ -40,7 +33,9 @@ func main() {
     }
     clientLog := waLog.Stdout("Client", "DEBUG", true)
     client := whatsmeow.NewClient(deviceStore, clientLog)
-    client.AddEventHandler(eventHandler)
+    whatsappHandler:=handler.SetClient(client)
+    
+    client.AddEventHandler(whatsappHandler.EventHandler)
 
     if client.Store.ID == nil {
         // No ID stored, new login

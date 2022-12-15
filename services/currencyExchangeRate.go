@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	unitcovertion "github.com/C-m3-Codin/q_me/unitCovertion"
+	unitcovertion "github.com/C-m3-Codin/q_me/unitcovertion"
 )
 
 
@@ -24,7 +24,7 @@ func ScheduleCurrency(){
         fmt.Println("Hello !!")
 		
 		unitcovertion.SetCurrencyUnit(getCurrencyAPI())
-        time.Sleep(10 * time.Second)
+        time.Sleep(10 * time.Minute)
 
     }
 }
