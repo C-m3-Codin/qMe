@@ -65,7 +65,7 @@ func main() {
         if err != nil {
             panic(err)
         }
-        services.GetCurrency()
+        services.ScheduleCurrency()
     }
 
 

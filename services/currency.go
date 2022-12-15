@@ -4,9 +4,20 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 )
 
-func GetCurrency() {
+// schedules to call the api every x amount of time
+func ScheduleCurrency(){
+	for true {
+        fmt.Println("Hello !!")
+		getCurrency()
+        time.Sleep(2 * time.Second)
+    }
+}
+
+// hits the api to get exchange rates
+func getCurrency() {
 	client := http.Client{}
 	request, err := http.NewRequest("GET", "https://api.exchangerate.host/latest", nil)
 	if err != nil {
