@@ -11,19 +11,37 @@ import (
 
 func  (whatsappClient *WhatsappClient)EventHandler(evt interface{}) {
     switch v := evt.(type) {
-    case *events.Message:
-        fmt.Println("Received a message!", v.Message.GetConversation())
-		// v.Message.
-        unitcovertion.GetCurrencyUnit("USD")
-		whatsappClient.textMessageHandler(v)
-	
 	case *events.CallOffer:
+		fmt.Println("Received a call offer")
 		// handle call
 	case *events.JoinedGroup:
+		fmt.Println("Joined a group")
 		// joined group
+    case *events.Message:
+
+		// checks if its a status update
+		if( v.Info.MessageSource.Chat.User=="status") {
+		
+			fmt.Println("ITs a status update")
+
+
+
+		}else if(v.Info.MessageSource.IsGroup){
+			// checks if message is a group message
+			fmt.Println("Its a Group message message")
+			// check for tags
+			
+
+		}else{
+			fmt.Println("Its a Direct message ...deploying handler")
+			whatsappClient.textMessageHandler(v)
+
+		}
 
     }
 }
+
+
 
 
 func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message){
@@ -32,15 +50,11 @@ func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message)
 	fmt.Println(match)
 
 	if(match){
-		// convert currency
-		fmt.Println("\n\n Matched ftx convert lol  \n\n")
-		// fmt.Println(message.Message.GetConversation()[0:3])
+
 		message_text:=strings.ToUpper(message.Message.GetConversation())
 		conv_from:=message_text[0:3]
 		conv_to:=message_text[4:7]
-		fmt.Println(unitcovertion.GetCurrencyUnit(conv_from))
-		fmt.Println(unitcovertion.GetCurrencyUnit(conv_to))
-		fmt.Println(message.Info.Sender)
+
 		fmt.Println((1/unitcovertion.GetCurrencyUnit(conv_from))*unitcovertion.GetCurrencyUnit(conv_to))
 		response:=(1/unitcovertion.GetCurrencyUnit(conv_from))*unitcovertion.GetCurrencyUnit(conv_to)
 		// var message *proto.Message
@@ -48,7 +62,11 @@ func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message)
 		
 		
 	}else{
-		fmt.Println("Not matched")
+		fmt.Println("\n\n\n\nNot matched not message handler for \n ")
+		fmt.Println(message.Info)
+		response:="fickle is away \n ~q_me"
+		whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
+
 	}
 	
 

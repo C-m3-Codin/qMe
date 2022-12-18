@@ -31,7 +31,7 @@ func main() {
     if err != nil {
         panic(err)
     }
-    clientLog := waLog.Stdout("Client", "DEBUG", true)
+    clientLog := waLog.Stdout("Client", "ERROR", true)
     client := whatsmeow.NewClient(deviceStore, clientLog)
     whatsappHandler:=handler.SetClient(client)
     

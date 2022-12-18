@@ -21,7 +21,6 @@ type response struct   {
 // schedules to call the api every x amount of time
 func ScheduleCurrency(){
 	for true {
-        fmt.Println("Hello !!")
 		
 		unitcovertion.SetCurrencyUnit(getCurrencyAPI())
         time.Sleep(10 * time.Minute)
@@ -47,10 +46,6 @@ func getCurrencyAPI()map[string]float32 {
 
 	var result response
 	json.NewDecoder(resp.Body).Decode(&result)
-	fmt.Println("\n\n\n\n\n\n\n\n")
-	fmt.Println(result.Rates)
-	fmt.Println("\n\n\n\n\n")
-	fmt.Println(result.Rates)
 	return result.Rates
 
 }
