@@ -23,7 +23,7 @@ func ScheduleCurrency(){
 	for true {
 		
 		unitcovertion.SetCurrencyUnit(getCurrencyAPI())
-        time.Sleep(10 * time.Minute)
+        time.Sleep(10 * time.Hour)
 
     }
 }
