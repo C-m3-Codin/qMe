@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/C-m3-Codin/q_me/unitcovertion"
@@ -46,19 +47,30 @@ func  (whatsappClient *WhatsappClient)EventHandler(evt interface{}) {
 
 func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message){
 
-	match, _ := regexp.MatchString("[A-Z]{3}2[A-Z]{3}", strings.ToUpper(message.Message.GetConversation()))
+	match, _ := regexp.MatchString("[A-Z]{3}2[A-Z]{3} [1-9]+([.][1-9])*", strings.ToUpper(message.Message.GetConversation()))
 	fmt.Println(match)
 
 	if(match){
+		fmt.Println("\n\nMatched\n\n\n")
 
-		message_text:=strings.ToUpper(message.Message.GetConversation())
-		conv_from:=message_text[0:3]
-		conv_to:=message_text[4:7]
+		re := regexp.MustCompile(`[A-Z]{3}2[A-Z]{3} [1-9]+([.][1-9])*`)
+		message_text := re.FindStringSubmatch(strings.ToUpper(message.Message.GetConversation()))
+		fmt.Println("\n\nMatched",message_text,"\n\n\n")
+		// message_text:=strings.ToUpper(message.Message.GetConversation())
+		conv_from:=message_text[0][0:3]
+		conv_to:=message_text[0][4:7]
+		count_str:=message_text[0][8:]
+		// convert float string to float
+		if count, err := strconv.ParseFloat(count_str, 32); err == nil {
+			fmt.Println(count) // 3.1415927410125732
+			fmt.Println(count)
+			fmt.Println((1/unitcovertion.GetCurrencyUnit(conv_from))*unitcovertion.GetCurrencyUnit(conv_to))
+			response:= ((1/unitcovertion.GetCurrencyUnit(conv_from))*unitcovertion.GetCurrencyUnit(conv_to))
+			response=response*float32(count)
+			whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
+		}
 
-		fmt.Println((1/unitcovertion.GetCurrencyUnit(conv_from))*unitcovertion.GetCurrencyUnit(conv_to))
-		response:=(1/unitcovertion.GetCurrencyUnit(conv_from))*unitcovertion.GetCurrencyUnit(conv_to)
 		// var message *proto.Message
-		whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
 		
 		
 	}else{
