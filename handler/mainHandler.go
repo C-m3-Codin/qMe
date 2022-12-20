@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/C-m3-Codin/q_me/unitcovertion"
 	"go.mau.fi/whatsmeow/types/events"
@@ -34,8 +35,28 @@ func  (whatsappClient *WhatsappClient)EventHandler(evt interface{}) {
 			
 
 		}else{
-			fmt.Println("Its a Direct message ...deploying handler")
-			whatsappClient.textMessageHandler(v)
+			// v.Info.Timestamp
+			// add checker to only reply to recent messages
+			duration, _ := time.ParseDuration("-100s")
+			startTime := time.Now().Add(duration)
+
+			// v.Info.Timestamp.
+
+
+
+
+			fmt.Println("Its a Direct message ...")
+			if(v.Info.Timestamp.Before(startTime)){
+				// before 100 seconds of script starting
+				// 
+				fmt.Println("But message is before starting script")
+			}else{
+				
+
+				fmt.Println(" ...deploying handler")
+
+				whatsappClient.textMessageHandler(v)
+			}
 
 		}
 
@@ -47,37 +68,34 @@ func  (whatsappClient *WhatsappClient)EventHandler(evt interface{}) {
 
 func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message){
 
-	match, _ := regexp.MatchString("[A-Z]{3}2[A-Z]{3} [1-9]+([.][1-9])*", strings.ToUpper(message.Message.GetConversation()))
+	match, _ := regexp.MatchString("[A-Z]{3}2[A-Z]{3} [0-9]+([.][0-9])*", strings.ToUpper(message.Message.GetConversation()))
 	fmt.Println(match)
 
+	// match for currency convert FX
 	if(match){
-		fmt.Println("\n\nMatched\n\n\n")
-
-		re := regexp.MustCompile(`[A-Z]{3}2[A-Z]{3} [1-9]+([.][1-9])*`)
+		re := regexp.MustCompile(`[A-Z]{3}2[A-Z]{3} [0-9]+([.][0-9])*`)
 		message_text := re.FindStringSubmatch(strings.ToUpper(message.Message.GetConversation()))
-		fmt.Println("\n\nMatched",message_text,"\n\n\n")
-		// message_text:=strings.ToUpper(message.Message.GetConversation())
+		fmt.Println("\n Matched currency convertion ",message_text)
 		conv_from:=message_text[0][0:3]
 		conv_to:=message_text[0][4:7]
 		count_str:=message_text[0][8:]
-		// convert float string to float
 		if count, err := strconv.ParseFloat(count_str, 32); err == nil {
-			fmt.Println(count) // 3.1415927410125732
-			fmt.Println(count)
 			fmt.Println((1/unitcovertion.GetCurrencyUnit(conv_from))*unitcovertion.GetCurrencyUnit(conv_to))
 			response:= ((1/unitcovertion.GetCurrencyUnit(conv_from))*unitcovertion.GetCurrencyUnit(conv_to))
 			response=response*float32(count)
 			whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
+		}else{
+			response:="Error in the value given"
+			whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
 		}
 
-		// var message *proto.Message
 		
 		
 	}else{
-		fmt.Println("\n\n\n\nNot matched not message handler for \n ")
+		fmt.Println("No matching hadlers deployed yet")
 		fmt.Println(message.Info)
-		response:="fickle is away \n ~q_me"
-		whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
+		// response:="fickle is away \n ~q_me"
+		// whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
 
 	}
 	
