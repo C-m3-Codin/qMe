@@ -9,6 +9,7 @@ import (
 
 	"github.com/C-m3-Codin/q_me/handler"
 	"github.com/C-m3-Codin/q_me/services"
+	"github.com/C-m3-Codin/q_me/unitcovertion"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store/sqlstore"
@@ -63,6 +64,7 @@ func main() {
             panic(err)
         }
         go services.ScheduleCurrency()
+        go unitcovertion.LoadUnitConversions("./unitConversion/units.csv")
     }
 
 
@@ -74,3 +76,5 @@ func main() {
 
     client.Disconnect()
 }
+
+

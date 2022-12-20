@@ -1,0 +1,76 @@
+
+LENGTH
+============================
+Kilometer
+Meter
+Centimeter
+Millimeter
+Mile
+Yard
+Foot
+Inch
+Nautical
+=============================
+
+Mass
+=============================
+Metric ton
+Kilogram
+Gram
+Milligram
+Mcg
+Long ton
+Short ton
+Stone
+Pound
+Ounce
+=============================
+
+Speed
+=============================
+Miles/hour
+Feet/sec
+Meters/sec
+Km/hour
+Knot
+
+=============================
+Volume
+=============================
+US gal
+US quart
+US pint
+US cup
+US oz
+US tbsp.
+US tsp.
+Cubic meter
+Liter
+Milliliter
+Imperial gal
+Imperial quart
+Imperial pint
+Imperial oz
+Imperial tbsp.
+Imperial tsp.
+Cubic foot
+Cubic inch
+
+
+==============================
+Area
+==============================
+Square km
+Hectare
+Square meter
+Square mile
+Acre
+Square yard
+Square foot
+Square inch
+
+
+
+
+
+
