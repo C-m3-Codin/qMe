@@ -8,7 +8,6 @@ Length,Kilometer,Yard,1093.61
 Length,Kilometer,Foot,3280.84
 Length,Kilometer,Inch,39370.1
 Length,Kilometer,Nautical mile,0.539957
-
 Mass,Metric ton,Metric ton,1
 Mass,Metric ton,Kilogram,1000
 Mass,Metric ton,Gram,1e+6
@@ -19,13 +18,11 @@ Mass,Metric ton,Short ton,1.10231
 Mass,Metric ton,Stone,157.473
 Mass,Metric ton,Pound,2204.62
 Mass,Metric ton,Ounce,35274
-
 Speed,Miles/hour,Miles/hour,1
 Speed,Miles/hour,Feet/sec,1.46667
 Speed,Miles/hour,Meters/sec,0.44704
 Speed,Miles/hour,Km/hour,1.60934
 Speed,Miles/hour,Knot,0.868976
-
 Volume,US gal,US gal,4
 Volume,US gal,US quart,4
 Volume,US gal,US pint,8
@@ -44,7 +41,6 @@ Volume,US gal,Imperial tbsp.,213.165
 Volume,US gal,Imperial tsp.,639.494
 Volume,US gal,Cubic foot,0.133681
 Volume,US gal,Cubic inch,231
-
 Area,Square km,Square km,1
 Area,Square km,Hectare,100
 Area,Square km,Square meter,1e+6
@@ -53,11 +49,9 @@ Area,Square km,Acre,247.105
 Area,Square km,Square yard,1.196e+6
 Area,Square km,Square foot,1.076e+7
 Area,Square km,Square inch,1.55e+9
-
 Fuel consumption,MPG (US),MPG (US),1
 Fuel consumption,MPG (US),MPG (imp.),1.20095
 Fuel consumption,MPG (US),Km/liter,0.425144
-
 Time,Nanosecond,Nanosecond,1
 Time,Nanosecond,Microsecond,0.001
 Time,Nanosecond,Millisecond,1e-6
@@ -70,7 +64,6 @@ Time,Nanosecond,Month,3.8027e-16
 Time,Nanosecond,Year,3.1689e-17
 Time,Nanosecond,Decade,3.1689e-18
 Time,Nanosecond,Century,3.1689e-19
-
 Digital Storage,Bit,Bit,1
 Digital Storage,Bit,Byte,0.125
 Digital Storage,Bit,Kilobit,0.001
