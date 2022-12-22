@@ -7,7 +7,7 @@ import (
 	"github.com/gocarina/gocsv"
 )
 
-// var Clients []UnitConverts;
+var Clients []UnitConverts;
 
 type UnitConverts struct {
 	UnitType   string `csv:"conversion_type"` 
@@ -16,7 +16,7 @@ type UnitConverts struct {
 	Multiplier float32  `csv:"multiply_by"` 	
 }
 
-var untiConvert map[string]float32
+var UntiConvert= make(map[string]UnitConverts)
 
 
 
@@ -28,14 +28,15 @@ func LoadUnitConversions(filePath string) {
     }
     defer in.Close()
 
-    clients := []*UnitConverts{}
+    // clients := []*UnitConverts{}
 
-    if err := gocsv.UnmarshalFile(in, &clients); err != nil {
+    if err := gocsv.UnmarshalFile(in, &Clients); err != nil {
         panic(err)
     }
-    for _, client := range clients {
-        fmt.Println("Hello, ", client.UnitType)
-		untiConvert[client.From+"TO"+client.To]=client.Multiplier
+    for _, client := range Clients {
+        fmt.Println("Hello, ", client.UnitType,client.To)
+		UntiConvert[client.To]=client
+		// untiConvert[client.From+"TO"+client.To]=client.Multiplier
     }
 
 }
@@ -43,12 +44,16 @@ func LoadUnitConversions(filePath string) {
 
 func GetConverted(from string ,to string )string{
 
-	v ,exist := untiConvert[from+"TO"+to]
-if exist {
-	return fmt.Sprintf("%v", v)
-     
-}
-	// return untiConvert[from+"TO"+to]
+
+
+if(UntiConvert[from].UnitType!=UntiConvert[to].UnitType){
+
 	return "Cant be converterd"
+}else{
+	response:= ((1/UntiConvert[from].Multiplier)*1/UntiConvert[to].Multiplier)
+	return fmt.Sprintf("%v",response)
+
+}
+
 }
 

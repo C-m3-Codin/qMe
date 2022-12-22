@@ -68,11 +68,13 @@ func  (whatsappClient *WhatsappClient)EventHandler(evt interface{}) {
 
 func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message){
 
-	match, _ := regexp.MatchString("[A-Z]{3}2[A-Z]{3} [0-9]+([.][0-9])*", strings.ToUpper(message.Message.GetConversation()))
-	fmt.Println(match)
+	match_currency, _ := regexp.MatchString("[A-Z]{3}2[A-Z]{3} [0-9]+([.][0-9])*", strings.ToUpper(message.Message.GetConversation()))
+	match_unit, _ := regexp.MatchString("\\w*2\\w*.unit \\d*[.]?\\d*", strings.ToLower(message.Message.GetConversation()))
+	fmt.Println("matched Currency",match_currency)
+	fmt.Println("matched unit :",match_unit)
 
 	// match for currency convert FX
-	if(match){
+	if(match_currency){
 		re := regexp.MustCompile(`[A-Z]{3}2[A-Z]{3} [0-9]+([.][0-9])*`)
 		message_text := re.FindStringSubmatch(strings.ToUpper(message.Message.GetConversation()))
 		fmt.Println("\n Matched currency convertion ",message_text)
@@ -91,6 +93,21 @@ func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message)
 
 		
 		
+	}else if (match_unit){
+
+		re := regexp.MustCompile(`\w*2\w*.unit \d*[.]?\d*`)
+		message_text := re.FindStringSubmatch(message.Message.GetConversation())
+		fmt.Println(message_text)
+		message_text[0]=strings.ReplaceAll(message_text[0], " ", "")
+		midPoint := strings.Index(message_text[0], "2")
+		units:= strings.Index(message_text[0], ".unit")
+		conv_from:=message_text[0][0:midPoint]
+		conv_to:=message_text[0][midPoint+1:units]
+		count:=message_text[0][units+5:]
+		fmt.Println("from:",conv_from)
+		fmt.Println("to:",conv_to)
+		fmt.Println("count:",count)
+
 	}else{
 		fmt.Println("No matching hadlers deployed yet")
 		fmt.Println(message.Info)
