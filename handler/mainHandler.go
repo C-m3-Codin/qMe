@@ -70,8 +70,10 @@ func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message)
 
 	match_currency, _ := regexp.MatchString("[A-Z]{3}2[A-Z]{3} [0-9]+([.][0-9])*", strings.ToUpper(message.Message.GetConversation()))
 	match_unit, _ := regexp.MatchString("\\w*2\\w*.unit \\d*[.]?\\d*", strings.ToLower(message.Message.GetConversation()))
+	match_whatsapp, _ := regexp.MatchString("whatsapp [1-9][\\d]{9}", strings.ToLower(message.Message.GetConversation()))
 	fmt.Println("matched Currency",match_currency)
 	fmt.Println("matched unit :",match_unit)
+	fmt.Println("matched whatsapp :",match_whatsapp)
 
 	// match for currency convert FX
 	if(match_currency){
@@ -80,7 +82,12 @@ func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message)
 	}else if (match_unit){
 		response:=convertUnit2Unit(message.Message.GetConversation())
 		whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
+	}else if(match_whatsapp){
+		response:=getWhatsappLink(message.Message.GetConversation())
+		whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
 	}else{
+
+
 		fmt.Println("No matching hadlers deployed yet")
 		fmt.Println(message.Info)
 		// response:="fickle is away \n ~q_me"
@@ -89,6 +96,16 @@ func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message)
 	}
 	
 
+}
+
+
+
+func getWhatsappLink(message string)string{
+	
+	re := regexp.MustCompile(`[1-9][\d]{9}`)
+	whatsapp_number := re.FindStringSubmatch(message)
+	message="https://wa.me/+91"+whatsapp_number[0]
+	return message
 }
 
 
