@@ -3,6 +3,7 @@ package unitcovertion
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/gocarina/gocsv"
 )
@@ -41,7 +42,7 @@ func LoadUnitConversions(filePath string) {
 }
 
 
-func GetConverted(from string ,to string )string{
+func GetConverted(from string ,to string, count_str string )string{
 
 fmt.Println("to Mltiplier: ",UntiConvert[to])
 fmt.Println("from Mltiplier: ",UntiConvert[from])
@@ -50,7 +51,14 @@ if(UntiConvert[from].UnitType!=UntiConvert[to].UnitType){
 	return "Cant be converterd"
 }else{
 	response:= ((1/UntiConvert[from].Multiplier)/(1/UntiConvert[to].Multiplier))
-	return fmt.Sprintf("%v",response)
+	if count, err := strconv.ParseFloat(count_str, 32); err == nil {
+		response=response*float32(count)
+
+		return fmt.Sprintf("%v",response)
+	}else{
+		return "Cant be converterd"
+
+	}
 }
 }
 

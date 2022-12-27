@@ -123,7 +123,7 @@ func convertUnit2Unit(message string)string{
 	fmt.Println("from:",conv_from)
 	fmt.Println("to:",conv_to)
 	fmt.Println("count:",count)
-	return unitcovertion.GetConverted(conv_from,conv_to)
+	return unitcovertion.GetConverted(conv_from,conv_to,count)
 
 
 	// return "Response after converting"
