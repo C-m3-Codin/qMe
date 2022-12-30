@@ -68,23 +68,33 @@ func  (whatsappClient *WhatsappClient)EventHandler(evt interface{}) {
 
 func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message){
 
-	match_currency, _ := regexp.MatchString("[A-Z]{3}2[A-Z]{3} [0-9]+([.][0-9])*", strings.ToUpper(message.Message.GetConversation()))
-	match_unit, _ := regexp.MatchString("\\w*2\\w*.unit \\d*[.]?\\d*", strings.ToLower(message.Message.GetConversation()))
-	match_whatsapp, _ := regexp.MatchString("whatsapp [1-9][\\d]{9}", strings.ToLower(message.Message.GetConversation()))
+	text_message := message.Message.GetConversation();
+
+	match_currency, _ := regexp.MatchString("[A-Z]{3}2[A-Z]{3} [0-9]+([.][0-9])*", strings.ToUpper(text_message))
+	match_unit, _ := regexp.MatchString("\\w*2\\w*.unit \\d*[.]?\\d*", strings.ToLower(text_message))
+	match_whatsapp, _ := regexp.MatchString("whatsapp [1-9][\\d]{9}", strings.ToLower(text_message))
+	match_reminder,_ :=regexp.MatchString("remindme[\\w* *\\w*]*\b(today|tomorrow)\b",strings.ToLower(text_message))
+
 	fmt.Println("matched Currency",match_currency)
 	fmt.Println("matched unit :",match_unit)
 	fmt.Println("matched whatsapp :",match_whatsapp)
+	fmt.Println("matched reminder :",match_reminder);
 
 	// match for currency convert FX
 	if(match_currency){
-		response:=convertCurrency2Currency(message.Message.GetConversation())
+		response:=convertCurrency2Currency(text_message)
 		whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))		
 	}else if (match_unit){
-		response:=convertUnit2Unit(message.Message.GetConversation())
+		response:=convertUnit2Unit(text_message)
 		whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
 	}else if(match_whatsapp){
-		response:=getWhatsappLink(message.Message.GetConversation())
+		response:=getWhatsappLink(text_message)
 		whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
+	}else if(match_reminder){
+		// handle reminder match
+		response:=setReminder(text_message)
+		whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
+
 	}else{
 
 
@@ -96,6 +106,13 @@ func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message)
 	}
 	
 
+}
+
+
+func setReminder(message string)string{
+// implement reminder
+
+	return "Reminder set"
 }
 
 
