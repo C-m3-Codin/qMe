@@ -26,4 +26,8 @@ func getReminders(time time.Time)( []Reminder){
 	return remindersAtTime
 }
 
+func createReminder(message string,To types.JID)(Reminder){
+	// parse message string to get time message to set reminder
+}
+
 
