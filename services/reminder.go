@@ -16,18 +16,18 @@ type Reminder struct {
 var reminderList = make(map[time.Time][]Reminder)
 
 
-func addReminder(reminder Reminder){
+func AddReminder(reminder Reminder){
 	
 	reminderList[reminder.Time] = append(reminderList[reminder.Time], reminder)
 }
 
-func getReminders(time time.Time)( []Reminder){
+func GetReminders(time time.Time)( []Reminder){
 	remindersAtTime:= reminderList[time]
 	return remindersAtTime
 }
 
-func createReminder(message string,To types.JID)(Reminder){
-	// parse message string to get time message to set reminder
-}
+// func createReminder(message string,To types.JID)(Reminder){
+// 	// parse message string to get time message to set reminder
+// }
 
 
