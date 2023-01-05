@@ -7,7 +7,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/C-m3-Codin/q_me/services"
 	"github.com/C-m3-Codin/q_me/unitcovertion"
+	"go.mau.fi/whatsmeow/types"
 	"go.mau.fi/whatsmeow/types/events"
 )
 
@@ -73,7 +75,7 @@ func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message)
 	match_currency, _ := regexp.MatchString("[A-Z]{3}2[A-Z]{3} [0-9]+([.][0-9])*", strings.ToUpper(text_message))
 	match_unit, _ := regexp.MatchString("\\w*2\\w*.unit \\d*[.]?\\d*", strings.ToLower(text_message))
 	match_whatsapp, _ := regexp.MatchString("whatsapp [1-9][\\d]{9}", strings.ToLower(text_message))
-	match_reminder,_ :=regexp.MatchString("remindme[\\w* *\\w*]*\b(today|tomorrow)\b",strings.ToLower(text_message))
+	match_reminder,_ :=regexp.MatchString("remindme [\\w* *\\w*]*\\b(today|tomorrow)\\b",strings.ToLower(text_message))
 
 	fmt.Println("matched Currency",match_currency)
 	fmt.Println("matched unit :",match_unit)
@@ -92,7 +94,7 @@ func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message)
 		whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
 	}else if(match_reminder){
 		// handle reminder match
-		response:=setReminder(text_message)
+		response:=setReminder(text_message,message.Info.Sender)
 		whatsappClient.SendMessagetoWhatsapp(message.Info.Sender,"",fmt.Sprintf("%v",response))
 
 	}else{
@@ -109,8 +111,20 @@ func (whatsappClient *WhatsappClient)textMessageHandler(message *events.Message)
 }
 
 
-func setReminder(message string)string{
+func setReminder(message string,To types.JID)string{
 // implement reminder
+// time:=
+
+re := regexp.MustCompile(`\s(\w+)$`)
+	reminderDateReal:=time.Now().Add(time.Minute*10)
+	reminderDate := re.FindStringSubmatch(message)
+	fmt.Println(reminderDate[0])
+	messageToRemind:=message[8:len(message)-len(reminderDate[0])]
+	reminder:=services.Reminder{messageToRemind,To,reminderDateReal}
+
+	fmt.Println("Reminder\n============\n To: ",To,"\nMessage: ",messageToRemind,"\nDate: ",reminderDateReal,reminderDate)
+	services.AddReminder(reminder)
+	fmt.Println(services.GetReminders(reminderDateReal))
 
 	return "Reminder set"
 }
